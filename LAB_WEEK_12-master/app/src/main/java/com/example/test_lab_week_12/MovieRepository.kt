@@ -14,7 +14,11 @@ class MovieRepository(private val movieService: MovieService) {
     fun fetchMovies(): Flow<List<Movie>> {
         return flow {
             val response = movieService.getPopularMovies(apiKey)
-            emit(response.results)
+
+            emit(
+                response.results
+                    .sortedByDescending { it.popularity }
+            )
         }.flowOn(Dispatchers.IO)
     }
 }
